@@ -1,0 +1,41 @@
+.DS_Store
+realestate_blockchain/node_modules
+realestate_blockchain/.pnp
+realestate_blockchain/.pnp.js
+
+# testing
+realestate_blockchain/coverage
+
+# next.js
+realestate_blockchain/.next/
+realestate_blockchain/out/
+
+# production
+realestate_blockchain/build
+
+# misc
+realestate_blockchain/.DS_Store
+realestate_blockchain/components/.DS_Store
+realestate_blockchain/public/.DS_Store
+realestate_blockchain/public/static/.DS_Store
+realestate_blockchain/public/static/image/.DS_Store
+*.pem
+
+# debug
+realestate_blockchain/npm-debug.log*
+realestate_blockchain/yarn-debug.log*
+realestate_blockchain/yarn-error.log*
+realestate_blockchain/.pnpm-debug.log*
+
+# local env files
+realestate_blockchain/.env*.local
+
+# vercel
+realestate_blockchain/.vercel
+
+
+# Hardhat files
+SmartContract_Realestate/node_modules
+SmartContract_Realestate/cache
+SmartContract_Realestate/artifacts
+SmartContract_Realestate/.DS_Store
