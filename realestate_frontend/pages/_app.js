@@ -2,6 +2,7 @@ import "./../styles/globals.css";
 import PropertiesContex from "@/components/context/PropertiyContext";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Navbar from "@/components/header/Navbar";
 
 export default function MyApp({ Component, pageProps }) {
   const [properties, setProperties] = useState([]);

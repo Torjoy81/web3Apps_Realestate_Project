@@ -1,37 +1,37 @@
 .DS_Store
-realestate_blockchain/node_modules
-realestate_blockchain/.pnp
-realestate_blockchain/.pnp.js
+realestate_frontend/node_modules
+realestate_frontend/.pnp
+realestate_frontend/.pnp.js
 
 # testing
-realestate_blockchain/coverage
+realestate_frontend/coverage
 
 # next.js
-realestate_blockchain/.next/
-realestate_blockchain/out/
+realestate_frontend/.next/
+realestate_frontend/out/
 
 # production
 realestate_blockchain/build
 
 # misc
-realestate_blockchain/.DS_Store
-realestate_blockchain/components/.DS_Store
-realestate_blockchain/public/.DS_Store
-realestate_blockchain/public/static/.DS_Store
-realestate_blockchain/public/static/image/.DS_Store
+realestate_frontend/.DS_Store
+realestate_frontend/components/.DS_Store
+realestate_frontend/public/.DS_Store
+realestate_frontend/public/static/.DS_Store
+realestate_frontend/public/static/image/.DS_Store
 *.pem
 
 # debug
-realestate_blockchain/npm-debug.log*
-realestate_blockchain/yarn-debug.log*
-realestate_blockchain/yarn-error.log*
-realestate_blockchain/.pnpm-debug.log*
+realestate_frontend/npm-debug.log*
+realestate_frontend/yarn-debug.log*
+realestate_frontend/yarn-error.log*
+realestate_frontend/.pnpm-debug.log*
 
 # local env files
-realestate_blockchain/.env*.local
+realestate_frontend/.env*.local
 
 # vercel
-realestate_blockchain/.vercel
+realestate_frontend/.vercel
 
 
 # Hardhat files

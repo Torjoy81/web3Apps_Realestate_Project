@@ -2,7 +2,9 @@ import { query } from "./db.js";
 
 export default async function handler(req, res) {
   try {
-    const queryStatement = `SELECT * FROM properties WHERE Image IS NOT NULL`;
+    const queryStatement = `SELECT *
+FROM properties 
+INNER JOIN agents ON properties.agent_id=agents.agent_id WHERE properties.Image IS NOT NULL`;
     const house_detail_list = [];
     const listOfData = await query({
       query: queryStatement,
