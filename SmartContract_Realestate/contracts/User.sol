@@ -4,42 +4,46 @@ pragma solidity ^0.8.9;
 
 contract RealEstateUsers{
 
-    
-    
-    enum UserStatus {
-        Buyer, Seller
-    }
    
-   
-        struct User{
-        address payable wallateaddress;
+    struct User{
         string firstName;
         string  lastName;
         string email;
+        string password;
         string  phoneNumber;
         uint   dateOfBirth;
-        uint  balance;
-        UserStatus  status;
+        bool isUserLoggedIn; 
     }
-        mapping (address => User) public Users;
-    mapping(address=>mapping(string=>string[])) public url_documentation;
+    mapping (string => User) public Users;
+    mapping(string=>string) public url_documentation;
     
 
-    function createUsers(address payable  _wallateaddress,string memory _firstName,string memory _lastName, string memory _email,
-    string memory _phoneNumber,uint _dateOfBirth,UserStatus _status) public{
-       Users[_wallateaddress] = User(_wallateaddress,_firstName,_lastName,_email,_phoneNumber,_dateOfBirth,1, _status);
+    function createUsers(string memory _firstName,string memory _lastName, string memory _email,
+    string memory _phoneNumber,uint _dateOfBirth,string memory _password) public{
+       Users[_email] = User(_firstName,_lastName,_email,_password,_phoneNumber,_dateOfBirth,false);
     }
 
-    function addUrlDocumentOfUser(address account, string memory url_name,string[] memory url_value) public{
-        url_documentation[account][url_name] = url_value;
+    function add_documentOfUser(string memory email, string memory cid) public{
+        url_documentation[email] = cid;
     }
 
     // function deopsit(address payable  wallateaddress) payable returns(string memory){
 
     // } 
 
-    function getUser(address userAddress) external  view returns (User memory) {
-       return Users[userAddress];
+    function getUser(string memory email) external  view returns (User memory) {
+       return Users[email];
+    }
+    function login(string memory email,string memory password) public  returns(bool){
+        if (keccak256(abi.encodePacked(Users[email].password)) == keccak256(abi.encodePacked(password))) {
+            Users[email].isUserLoggedIn = true;
+            return Users[email].isUserLoggedIn;
+        } else {
+            return false;
+        }
+    }
+    function logoutUser(string memory email) public {
+       Users[email].isUserLoggedIn = false;
     }
 
 }

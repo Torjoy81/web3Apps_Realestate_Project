@@ -39,3 +39,4 @@ SmartContract_Realestate/node_modules
 SmartContract_Realestate/cache
 SmartContract_Realestate/artifacts
 SmartContract_Realestate/.DS_Store
+SmartContract_Realestate/.env
