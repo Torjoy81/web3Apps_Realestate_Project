@@ -12,6 +12,7 @@
     "@heroicons/react": "^2.0.13",
     "@next/font": "13.1.2",
     "axios": "^1.2.2",
+    "bootstrap": "^5.2.3",
     "mysql2": "^3.0.1",
     "next": "13.1.2",
     "react": "18.2.0",
