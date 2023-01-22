@@ -8,7 +8,7 @@ export async function query({ query, values = [] }) {
     password: "hbstudent",
   });
   try {
-    const [data] = await dbConnection.execute(query, values);
+    const data = await dbConnection.execute(query, values);
     dbConnection.end();
     return data;
   } catch (error) {

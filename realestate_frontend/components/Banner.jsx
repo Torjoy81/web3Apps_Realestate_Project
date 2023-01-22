@@ -13,11 +13,11 @@ function Banner() {
             </span>
             Your Dream house with us
           </h1>
-          <p className="max-w-[480px] mb-8">
+          {/* <p className="max-w-[480px] mb-8">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia
             quod perspiciatis repudiandae voluptatem necessitatibus, nihil quam
             nesciunt adipisci iste totam.
-          </p>
+          </p> */}
         </div>
         <div className="hidden flex-1 lg:flex justify-end items-end">
           <Image
@@ -28,7 +28,6 @@ function Banner() {
           />
         </div>
       </div>
-      <Search />
     </section>
   );
 }

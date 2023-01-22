@@ -7,7 +7,7 @@ export default function MyApp({ Component, pageProps }) {
   const [properties, setProperties] = useState([]);
   useEffect(() => {
     async function getAllPropertis() {
-      const apiUrl = `http://localhost:3000/api/getAllData`;
+      const apiUrl = `http://localhost:3000/api/get_properties`;
       try {
         const response = await axios.get(apiUrl);
 

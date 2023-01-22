@@ -53,7 +53,7 @@ const PropertiesDetail = () => {
                   <div>{property_info.sqft}sq ft</div>
                 </div>
               </div>
-              <div>
+              {/* <div>
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse
                 dolore officiis perferendis incidunt unde id, culpa aspernatur
                 odit itaque? Natus eos possimus maxime facilis optio iure
@@ -66,7 +66,7 @@ const PropertiesDetail = () => {
                 aliquid magnam suscipit autem alias voluptate ratione
                 repellendus, dolorum facilis distinctio, cumque, commodi amet
                 esse dignissimos aut enim.
-              </div>
+              </div> */}
             </div>
             <div className="flex-1 bg-white w-full mb-8 border border-gray-300 rounded-lg px-6 py-8">
               <div className="flex items-center gap-x-4 mb-8">

@@ -1,16 +1,21 @@
 {
   "name": "hardhat-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "build": "npx thirdweb@latest detect",
-    "deploy": "npx thirdweb@latest deploy",
-    "release": "npx thirdweb@latest release"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "devDependencies": {
     "@openzeppelin/contracts": "^4.8.1",
     "hardhat": "^2.12.6"
   },
   "dependencies": {
     "@nomiclabs/hardhat-ethers": "^2.2.2",
+    "@nomiclabs/hardhat-waffle": "^2.0.1",
     "@thirdweb-dev/contracts": "^3.3.0",
     "dotenv": "^16.0.3"
   }

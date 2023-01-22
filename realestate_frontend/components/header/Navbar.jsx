@@ -6,12 +6,13 @@ function Navbar() {
     <header className="py-6 mb-12 border-b">
       <div className="container mx-auto flex justify-between items-center">
         <Link href="/">
-          <img src="/static/image/logo.svg" alt="No img" />
+          <img src="/static/image/imglogo.png" alt="No img" />
+          Tsensa
         </Link>
         <div className="flex items-center gap-6">
           <Link
             className="bg-violet-700 hover:bg-violet-800 text-white px-4 py-3 rounded-lg transition"
-            href="#"
+            href="/signup"
           >
             Sign up
           </Link>
