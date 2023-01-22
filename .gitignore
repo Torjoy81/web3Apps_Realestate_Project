@@ -9,7 +9,7 @@ realestate_frontend/coverage
 # next.js
 realestate_frontend/.next/
 realestate_frontend/out/
-
+realestate_frontend/.env
 # production
 realestate_blockchain/build
 
