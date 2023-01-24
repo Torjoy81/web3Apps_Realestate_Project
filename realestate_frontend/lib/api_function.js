@@ -1,11 +1,12 @@
-import axios from "axios";
-
 export const sendUser = async (data) => {
-  axios
-    .post("/api/createUser", JSON.stringify(data), {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-    .then(() => console.log("SUccess"));
+  const response = await fetch("/api/createUser", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (response.ok) {
+    return await response.json();
+  }
 };

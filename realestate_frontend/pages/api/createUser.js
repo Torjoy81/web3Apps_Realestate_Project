@@ -1,36 +1,38 @@
-import { query } from "@/lib/db";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 export default async function handler(req, res) {
+  const {
+    first_name,
+    last_name,
+    email,
+    phone_no,
+    profession,
+    dateOfbirth,
+    password,
+  } = req.body;
   try {
     if (req.method === "POST") {
-      const queryStatement =
-        "INSERT INTO Users (user_id,user_firstName, user_lastName, user_email,dateofbirth,country,phone_No ,password) VALUES (?,?,?,?,?,?,?)";
-      const {
-        first_Name,
-        last_Name,
-        email,
-        phone_No,
-        country,
-        birthDay,
-        passWord,
-        cm_password,
-      } = req.body;
-      const user_value = [
-        crypto.randomUUID(),
-        first_Name,
-        last_Name,
-        email,
-        birthDay,
-        country,
-        phone_No,
-        passWord,
-      ];
-      await query({
-        query: queryStatement,
-        values: user_value,
-      }).then(() => {});
+      try {
+        const result = await prisma.user.create({
+          data: {
+            first_name,
+            last_name,
+            email,
+            phone_no,
+            profession,
+            dateOfbirth: new Date(dateOfbirth),
+            password,
+          },
+        });
+        res.status(200).json({ response: result });
+      } catch (error) {
+        console.log(error);
+      }
+
+      // console.log(userForm);
     }
-    res.status(200).json({ status: "Success" });
   } catch (error) {
     res.status(500).json({ error: error });
   }

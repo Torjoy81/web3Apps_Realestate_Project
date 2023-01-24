@@ -4,27 +4,31 @@ import React, { useState } from "react";
 
 export default function SingUp() {
   const [form, setForm] = useState({
-    first_Name: "",
-    last_Name: "",
+    first_name: "",
+    last_name: "",
     email: "",
-    phone_No: "",
-    country: "",
-    birthDay: "",
-    passWord: "",
+    phone_no: "",
+    profession: "",
+    dateOfbirth: "",
+    password: "",
     cm_password: "",
   });
-  const [countryArray, setCountry] = useState([
-    "USA",
-    "Germany",
-    "UK",
-    "France",
-    "Spain",
-    "Canada",
+  const [professionArray, setProfession] = useState([
+    "DOCTOR",
+    "ENGENIEER",
+    "BUSINESS",
+    "PUBLIC SERVICE",
+    "POLICE",
+    "JOURNALIST",
+    "MEDIA PERSON",
+    "INVESTOR",
+    "UNEMPLOYED",
+    "DEFENSE_OFICIER",
+    "OWN_SHOP",
   ]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-    console.log(form.country);
   };
 
   const handleSubmit = async (e) => {
@@ -64,16 +68,16 @@ export default function SingUp() {
                 type="text"
                 placeholder="Firstname"
                 className="border border-gray-400 py-1 px-2"
-                name="first_Name"
-                value={form.first_Name}
+                name="first_name"
+                value={form.first_name}
                 onChange={handleChange}
               />
               <input
                 type="text"
                 placeholder="Surname"
                 className="border border-gray-400 py-1 px-2"
-                name="last_Name"
-                value={form.last_Name}
+                name="last_name"
+                value={form.last_name}
                 onChange={handleChange}
               />
             </div>
@@ -92,19 +96,22 @@ export default function SingUp() {
                 type="date"
                 placeholder="Date of Birth"
                 className="border border-gray-400 py-1 px-2 w-full"
-                name="birthDay"
-                value={form.birthDay}
+                name="dateOfbirth"
+                value={form.dateOfbirth}
                 onChange={handleChange}
               />
             </div>
             <div className="grid grid-cols-3 gap-5 mt-5">
-              <Drop_Down countries={countryArray} setCountry={handleChange} />
+              <Drop_Down
+                profession={professionArray}
+                setProfession={handleChange}
+              />
               <input
                 type="text"
                 placeholder="PhoneNumber"
                 className="border border-gray-400 py-1 px-2 col-span-2"
-                name="phone_No"
-                value={form.phone_No}
+                name="phone_no"
+                value={form.phone_no}
                 onChange={handleChange}
               />
             </div>
@@ -113,8 +120,8 @@ export default function SingUp() {
                 type="password"
                 placeholder="Password"
                 className="border border-gray-400 py-1 px-2 w-full"
-                name="passWord"
-                value={form.passWord}
+                name="password"
+                value={form.password}
                 onChange={handleChange}
               />
             </div>

@@ -40,7 +40,7 @@ model User {
   last_name     String
   email         String   @unique
   phone_no      String
-  country       String
+  country       String   @default("Germany")
   profession    Profession 
   dateOfbirth   DateTime
   password      String     
@@ -65,8 +65,8 @@ model Properties{
   id Int @id @default(autoincrement())
   property_title String
   property_address String
-  price  Decimal @db.Decimal(8,2) @default(0.00)
-  description String
+  price  Decimal @db.Decimal(10,2) @default(0.00)
+  description String? @db.Text
   sqft Int
   bedroom Int
   bathroom Int
@@ -85,7 +85,6 @@ model Agent{
   last_name     String
   email         String
   phone_no      String
-  address       String
   properties    Properties[]
 
   @@unique([email, phone_no])
@@ -105,4 +104,7 @@ enum Profession {
  JOURNALIST
  MEDIA_PERSON
  INVESTOR
+ UNEMPLOYED
+ DEFENSE_OFICIER
+ OWN_SHOP
 }

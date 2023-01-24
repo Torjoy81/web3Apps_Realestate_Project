@@ -19,6 +19,7 @@ realestate_frontend/components/.DS_Store
 realestate_frontend/public/.DS_Store
 realestate_frontend/public/static/.DS_Store
 realestate_frontend/public/static/image/.DS_Store
+realestate_frontend/prisma/migrations
 *.pem
 
 # debug
@@ -35,8 +36,8 @@ realestate_frontend/.vercel
 
 
 # Hardhat files
-SmartContract_Realestate/node_modules
-SmartContract_Realestate/cache
-SmartContract_Realestate/artifacts
-SmartContract_Realestate/.DS_Store
-SmartContract_Realestate/.env
+smart_Contract_test/node_modules
+smart_Contract_test/cache
+smart_Contract_test/artifacts
+smart_Contract_test/.DS_Store
+smart_Contract_test/.env
