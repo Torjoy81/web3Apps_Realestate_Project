@@ -24,5 +24,6 @@ export async function getStaticProps() {
     props: {
       property_data: propertyJSON,
     },
+    revalidate: 3600,
   };
 }

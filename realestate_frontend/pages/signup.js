@@ -1,6 +1,7 @@
 import Drop_Down from "@/components/dropDown";
-import { sendUser } from "@/lib/api_function";
+import { sendUser } from "./api/lib/api_function";
 import React, { useState } from "react";
+import Router from "next/router";
 
 export default function SingUp() {
   const [form, setForm] = useState({
@@ -33,7 +34,10 @@ export default function SingUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await sendUser({ ...form });
+    const data = await sendUser({ ...form });
+    if (data.status === 201) {
+      Router.push("/api/auth/verify-request");
+    }
   };
 
   return (

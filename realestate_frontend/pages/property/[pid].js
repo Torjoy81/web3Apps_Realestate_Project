@@ -1,17 +1,12 @@
-import React, { useContext } from "react";
+import React from "react";
 import { BiBed, BiBath, BiArea } from "react-icons/bi";
-import { useRouter } from "next/router";
-import PropertiesContex from "@/components/context/PropertiyContext";
 import Navbar from "@/components/header/Navbar";
-import Link from "next/link";
+import { PrismaClient } from "@prisma/client";
 
-const PropertiesDetail = () => {
-  const { properties } = useContext(PropertiesContex);
-  const router = useRouter();
-  const property_info = properties.find(
-    (house) => house.property_id === parseInt(router.query.pid)
-  );
-  console.log(property_info);
+const prisma = new PrismaClient();
+
+const PropertiesDetail = ({ loadedProperty }) => {
+  console.log(loadedProperty);
 
   return (
     <div className="max-w-[1440px] min-h-[1800px] mx-auto bg-white">
@@ -21,54 +16,43 @@ const PropertiesDetail = () => {
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
             <div>
               <h2 className="text-2xl font-semibold ">
-                {property_info.property_name}
+                {loadedProperty.property_title}
               </h2>
-              <h3 className="text-lg mb-4">{property_info.address}</h3>
+              <h3 className="text-lg mb-4">
+                {loadedProperty.property_address}
+              </h3>
             </div>
             <div>
               <div className="bg-green-500 text-white px-3 rounded-full">
                 House for Sell
               </div>
               <div className="text-3xl font-semibold text-violet-600">
-                {property_info.price} €
+                {loadedProperty.price} €
               </div>
             </div>
           </div>
           <div className="flex flex-col items-start gap-8 lg:flex-row ">
             <div className="max-w-[768px]">
               <div className="mb-8">
-                <img src={property_info.ImageLg} alt="" />
+                <img src={loadedProperty.ImageLG} alt="" />
               </div>
               <div className="flex gap-x-6 text-violet-700 mb-6 ">
                 <div className="flex gap-x-2 items-center">
                   <BiBed className="text-2xl " />
-                  <div>{property_info.bedrooms}</div>
+                  <div>{loadedProperty.bedroom}</div>
                 </div>
                 <div className="flex gap-x-2 items-center">
                   <BiBath className="text-2xl " />
-                  <div>{property_info.bathrooms}</div>
+                  <div>{loadedProperty.bathroom}</div>
                 </div>
                 <div className="flex gap-x-2 items-center">
                   <BiArea className="text-2xl " />
-                  <div>{property_info.sqft}sq ft</div>
+                  <div>{loadedProperty.sqft}sq ft</div>
                 </div>
               </div>
-              {/* <div>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse
-                dolore officiis perferendis incidunt unde id, culpa aspernatur
-                odit itaque? Natus eos possimus maxime facilis optio iure
-                reprehenderit consequatur similique nam. Illo vero voluptatem
-                qui iure harum dolor cum, incidunt nisi ut nemo, id illum itaque
-                sed ipsam? Sit est nobis, quia amet alias non eum veritatis
-                incidunt placeat iste corporis ab! Animi delectus in ut ex
-                optio, recusandae illo accusantium laborum alias minima, quis,
-                molestiae corporis totam. Tempora voluptatibus id quo tenetur
-                aliquid magnam suscipit autem alias voluptate ratione
-                repellendus, dolorum facilis distinctio, cumque, commodi amet
-                esse dignissimos aut enim.
-              </div> */}
+              <div>{loadedProperty.description}</div>
             </div>
-            <div className="flex-1 bg-white w-full mb-8 border border-gray-300 rounded-lg px-6 py-8">
+            {/* <div className="flex-1 bg-white w-full mb-8 border border-gray-300 rounded-lg px-6 py-8">
               <div className="flex items-center gap-x-4 mb-8">
                 <div className="border border-gray-300 p-1 rounded-full w-25 h-25">
                   <img src={property_info.agent_image} alt="No agent Image" />
@@ -112,7 +96,7 @@ const PropertiesDetail = () => {
                   </div>
                 </form>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </section>
@@ -121,3 +105,35 @@ const PropertiesDetail = () => {
 };
 
 export default PropertiesDetail;
+
+export async function getStaticProps(context) {
+  const { params } = context;
+  const propertyID = params.pid;
+  const propertyByID = await prisma.properties.findUnique({
+    where: {
+      id: parseInt(propertyID),
+    },
+    include: {
+      agent: true,
+    },
+  });
+  return {
+    props: {
+      loadedProperty: JSON.parse(JSON.stringify(propertyByID)),
+    },
+  };
+}
+export async function getStaticPaths() {
+  const propertiesID = await prisma.properties.findMany({
+    select: {
+      id: true,
+    },
+  });
+  const obtoarr = Object.values(propertiesID);
+  return {
+    paths: obtoarr.map((item) => {
+      return { params: { pid: item.id.toString() } };
+    }),
+    fallback: false,
+  };
+}

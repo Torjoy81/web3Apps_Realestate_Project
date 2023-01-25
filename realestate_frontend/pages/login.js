@@ -1,6 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
+import { signIn } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import Router from "next/router";
 
 export default function Sign_in() {
+  const [UserInfo, setUserInfo] = useState({ email: "", password: "" });
+  const { data: session, status } = useSession();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const res = await signIn("credentials", {
+      email: UserInfo.email,
+      password: UserInfo.password,
+      redirect: false,
+    });
+    console.log(res);
+  };
+  if (status === "authenticated") {
+    Router.push("/");
+  }
+
   return (
     <div className="container mx-auto">
       <section className="h-full gradient-form bg-gray-200 md:h-screen">
@@ -21,28 +40,37 @@ export default function Sign_in() {
                           The Tsensa Realestate Service
                         </h4>
                       </div>
-                      <form>
+                      <form onSubmit={handleSubmit}>
                         <p className="mb-4">Please login to your account</p>
                         <div className="mb-4">
                           <input
-                            type="text"
+                            type="email"
                             className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                            id="exampleFormControlInput1"
-                            placeholder="Username"
+                            placeholder="Email"
+                            value={UserInfo.email}
+                            onChange={({ target }) =>
+                              setUserInfo({ ...UserInfo, email: target.value })
+                            }
                           />
                         </div>
                         <div className="mb-4">
                           <input
                             type="password"
                             className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                            id="exampleFormControlInput1"
                             placeholder="Password"
+                            value={UserInfo.password}
+                            onChange={({ target }) =>
+                              setUserInfo({
+                                ...UserInfo,
+                                password: target.value,
+                              })
+                            }
                           />
                         </div>
                         <div className="text-center pt-1 mb-12 pb-1">
                           <button
                             className="inline-block px-6 py-2.5 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg transition duration-150 ease-in-out w-full mb-3"
-                            type="button"
+                            type="submit"
                             data-mdb-ripple="true"
                             data-mdb-ripple-color="light"
                             style={{

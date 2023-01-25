@@ -6,7 +6,5 @@ export const sendUser = async (data) => {
     },
     body: JSON.stringify(data),
   });
-  if (response.ok) {
-    return await response.json();
-  }
+  return response;
 };
