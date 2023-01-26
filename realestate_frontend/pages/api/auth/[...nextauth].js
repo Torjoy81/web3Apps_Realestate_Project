@@ -9,6 +9,7 @@ export default NextAuth({
   adapter: PrismaAdapter(prisma),
   session: {
     strategy: "jwt",
+    maxAge: 2 * 60 * 60,
   },
   // adding user info to the user session object
   providers: [

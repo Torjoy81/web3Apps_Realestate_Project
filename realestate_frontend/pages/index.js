@@ -7,7 +7,6 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export default function DashBoard({ property_data }) {
-  console.log(property_data);
   return (
     <div className="max-w-[1440px] min-h-[1800px] mx-auto bg-white">
       <Navbar />
