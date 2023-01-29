@@ -1,8 +1,6 @@
 import nodemailer from "nodemailer";
 import sendgridTransport from "nodemailer-sendgrid-transport";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "./lib/db";
 
 export default async function handler(req, res) {
   const {

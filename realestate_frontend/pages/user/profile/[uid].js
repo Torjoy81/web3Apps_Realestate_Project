@@ -1,53 +1,80 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { GrEdit } from "react-icons/gr";
-import { PrismaClient } from "@prisma/client";
 import moment from "moment/moment";
-import { PencilSquareIcon } from "@heroicons/react/24/outline";
+import UpdateFormInput from "@/components/updateFormInput";
+import { prisma } from "@/pages/api/lib/db";
+import { updateUser } from "@/pages/api/lib/api_function";
 
-const prisma = new PrismaClient();
-export default function User_info({ loadedUser }) {
+export default function User_info({ loadedUser, user_update }) {
   const [user_profile_info, setProfile] = useState({
     name1: {
-      firstName: loadedUser ? loadedUser.first_name : "",
-      isEditable: true,
+      first_name: loadedUser ? loadedUser.first_name : "",
+      isEditablename1: true,
     },
     name2: {
-      lastName: loadedUser ? loadedUser.last_name : "",
-      isEditable: true,
+      last_name: loadedUser ? loadedUser.last_name : "",
+      isEditablename2: true,
     },
-    Email: { email: loadedUser ? loadedUser.email : "", isEditable: true },
+    Email: { email: loadedUser ? loadedUser.email : "", isEditableEmail: true },
     Phone: {
       phone_no: loadedUser ? loadedUser.phone_no : "",
-      isEditable: true,
+      isEditablePhone: true,
     },
     Job: {
       profession: loadedUser ? loadedUser.profession : "",
-      isEditable: true,
+      isEditableJob: true,
     },
-    About: { about: "", isEditable: true },
+    About: { about: "", isEditableAbout: true },
     Country: {
-      nationality: loadedUser ? loadedUser.country : "",
-      isEditable: true,
+      country: loadedUser ? loadedUser.country : "",
+      isEditableCountry: true,
     },
     Age: {
-      dateofbirth: loadedUser ? loadedUser.dateOfbirth : "",
-      isEditable: true,
+      dateOfbirth: loadedUser
+        ? moment(loadedUser.dateOfbirth).format("YYYY-MM-DD")
+        : "",
+      isEditableAge: true,
     },
   });
-  const inputRef = useRef(null);
-
-  const handleEdit = (e, value) => {
+  const [isSubmit, setSubmit] = useState(false);
+  const hanndleBlur = (e, value, key) => {
     if (e.target.id) {
       console.log(e.target.id);
       setProfile({ ...user_profile_info, [e.target.id]: value });
-
-      setTimeout(() => {
-        inputRef.current.focus();
-        console.log(user_profile_info);
-      }, 500);
     }
-    //
-    //
+
+    if (user_profile_info[e.target.id][key[0]] !== loadedUser[key[0]]) {
+      setSubmit(true);
+    } else {
+      setSubmit(false);
+    }
+  };
+
+  const handleEditable = (e, value) => {
+    if (e.target.id) {
+      setProfile({ ...user_profile_info, [e.target.id]: value });
+    }
+  };
+
+  const handleChangeIn = (e, objKey, valueofkey) => {
+    setProfile({
+      ...user_profile_info,
+      [objKey]: { [valueofkey[0]]: e.target.value, [valueofkey[1]]: false },
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    let user_info = { user_id: loadedUser.id };
+    Object.values(user_profile_info).forEach((value) => {
+      const keysArray = Object.keys(value);
+      user_info = { ...user_info, [keysArray[0]]: value[keysArray[0]] };
+    });
+
+    const result = await updateUser(user_info);
+    if (result.ok) {
+      setSubmit(false);
+    }
   };
 
   return (
@@ -58,153 +85,134 @@ export default function User_info({ loadedUser }) {
           src="profile-image.jpg"
           alt="Profile Image"
         />
-        <div className="ml-10 mr-10">
-          <div className="mb-4 relative">
-            <label className="block text-gray-700 mb-2" htmlFor="name">
-              Name
-            </label>
-            <input
-              className="bg-white border border-gray-400 p-2 rounded-lg w-full"
-              type="text"
-              name="name2"
-              value={user_profile_info["name2"].lastName}
-              readOnly={false}
-              onChange={({ target }) =>
-                setProfile({
-                  ...user_profile_info,
-                  name2: { lastName: target.value, isEditable: false },
-                })
-              }
-            />
-            <GrEdit className=" w-6 h-6 absolute top-[50px] transform -translate-y-1/2 right-3" />
-          </div>
-          <div className="mb-4 relative">
-            <label className="block text-gray-700 mb-2" htmlFor="email">
-              Email
-            </label>
-            <input
-              className="bg-white border border-gray-400 p-2 rounded-lg w-full"
+        <form onSubmit={handleSubmit}>
+          <div className="ml-10 mr-10">
+            <div className="grid grid-cols-2 gap-5">
+              <UpdateFormInput
+                label="First Name"
+                value={{ ...user_profile_info["name1"] }}
+                type="text"
+                id="name1"
+                handleChange={handleChangeIn}
+                handleEdit={handleEditable}
+                name={["first_name", "isEditablename1"]}
+                tag="input"
+                hnBlur={hanndleBlur}
+              />
+              <UpdateFormInput
+                label="SurName"
+                value={{ ...user_profile_info["name2"] }}
+                type="text"
+                id="name2"
+                handleChange={handleChangeIn}
+                handleEdit={handleEditable}
+                name={["last_name", "isEditablename2"]}
+                tag="input"
+                hnBlur={hanndleBlur}
+              />
+            </div>
+            <UpdateFormInput
+              label="Email"
+              value={{ ...user_profile_info["Email"] }}
               type="email"
-              ref={inputRef}
-              value={user_profile_info["Email"].email}
-              readOnly={user_profile_info["Email"].isEditable}
-              onChange={({ target }) =>
-                setProfile({
-                  ...user_profile_info,
-                  Email: { email: target.value, isEditable: false },
-                })
-              }
-              onBlur={() => console.log("Tarek")}
-            />
-
-            <PencilSquareIcon
-              className="w-6 h-6 absolute top-[50px] transform -translate-y-1/2 right-3"
               id="Email"
-              onClick={(e) =>
-                handleEdit(e, {
-                  ...user_profile_info["Email"],
-                  isEditable: !user_profile_info["Email"].isEditable,
-                })
-              }
+              handleChange={handleChangeIn}
+              handleEdit={handleEditable}
+              name={["email", "isEditableEmail"]}
+              tag="input"
+              hnBlur={hanndleBlur}
             />
-          </div>
-          <div className="mb-4 relative">
-            <label className="block text-gray-700 mb-2" htmlFor="phone">
-              Phone
-            </label>
-            <input
-              className="bg-white border border-gray-400 p-2 rounded-lg w-full"
-              type="tel"
-              id="phone"
-              value={user_profile_info["Phone"].phone_no}
-              readOnly
-            />
-            <GrEdit className="pointer-events-auto w-6 h-6 absolute top-[50px] transform -translate-y-1/2 right-3" />
-          </div>
-          <div className="mb-4 relative">
-            <label className="block text-gray-700 mb-2" htmlFor="job-title">
-              Job Title
-            </label>
-            <input
-              className="bg-white border border-gray-400 p-2 rounded-lg w-full"
+            <UpdateFormInput
+              label="Contact"
+              value={{ ...user_profile_info["Phone"] }}
               type="text"
-              value={user_profile_info["Job"].profession}
-              readOnly
+              id="Phone"
+              handleChange={handleChangeIn}
+              handleEdit={handleEditable}
+              name={["phone_no", "isEditablePhone"]}
+              tag="input"
+              hnBlur={hanndleBlur}
             />
-            <GrEdit className="pointer-events-none w-6 h-6 absolute top-[50px] transform -translate-y-1/2 right-3" />
-          </div>
-          <div className="mb-4 relative">
-            <label className="block text-gray-700 mb-2" htmlFor="description">
-              About
-            </label>
-            <textarea
-              className="bg-white border border-gray-400 p-2 rounded-lg w-full"
-              rows="3"
-              readOnly
-              value={user_profile_info["About"].about}
-            >
-              {/* Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam
+            <UpdateFormInput
+              label="Job Title"
+              value={{ ...user_profile_info["Job"] }}
+              type="text"
+              id="Job"
+              handleChange={handleChangeIn}
+              handleEdit={handleEditable}
+              name={["profession", "isEditableJob"]}
+              tag="select"
+              hnBlur={hanndleBlur}
+            />
+            <div className="mb-4 relative">
+              <label className="block text-gray-700 mb-2" htmlFor="description">
+                About
+              </label>
+              <textarea
+                className="bg-white border border-gray-400 p-2 rounded-lg w-full"
+                rows="3"
+                readOnly
+                value={user_profile_info["About"].about}
+              >
+                {/* Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam
               viverra euismod odio, gravida pellentesque urna varius vitae. */}
-            </textarea>
-            <GrEdit className="pointer-events-none w-6 h-6 absolute top-1/2 transform -translate-y-1/2 right-3" />
-          </div>
-          <div className="mb-4 relative">
-            <label className="block text-gray-700 mb-2" htmlFor="nationality">
-              Nationality
-            </label>
-            <input
-              className="bg-white border border-gray-400 p-2 rounded-lg w-full"
+              </textarea>
+              <GrEdit className="pointer-events-none w-6 h-6 absolute top-1/2 transform -translate-y-1/2 right-3" />
+            </div>
+            <UpdateFormInput
+              label="Nationality"
+              value={{ ...user_profile_info["Country"] }}
               type="text"
-              id="nationality"
-              value={user_profile_info["Country"].nationality}
-              readOnly
+              id="Country"
+              name={["country", "isEditableCountry"]}
+              handleChange={handleChangeIn}
+              handleEdit={handleEditable}
+              tag="input"
+              hnBlur={hanndleBlur}
             />
-            <GrEdit className="pointer-events-none w-6 h-6 absolute top-[50px] transform -translate-y-1/2 right-3" />
-          </div>
-          <div className="mb-4 relative">
-            <label className="block text-gray-700 mb-2" htmlFor="dateofbirth">
-              Birth Date
-            </label>
-            <input
-              className="bg-white border border-gray-400 p-2 rounded-lg w-full"
-              type="text"
-              value={moment(user_profile_info["Age"].dateofbirth).format(
-                "DD-MM-YYYY"
-              )}
-              readOnly
+            <UpdateFormInput
+              label="Date of Birth"
+              value={{ ...user_profile_info["Age"] }}
+              type="date"
+              id="Age"
+              handleChange={handleChangeIn}
+              handleEdit={handleEditable}
+              name={["dateOfbirth", "isEditableAge"]}
+              tag="input"
+              hnBlur={hanndleBlur}
             />
-            <GrEdit className="pointer-events-none w-6 h-6 absolute top-[50px] transform -translate-y-1/2 right-3" />
+            <div className="mb-4 float-right">
+              <button
+                type="submit"
+                className={
+                  isSubmit
+                    ? "px-8 py-3 text-white bg-lime-600 rounded focus:outline-none"
+                    : "px-8 py-3 text-white bg-green-300 rounded focus:outline-none"
+                }
+                disabled={!isSubmit}
+              >
+                Update
+              </button>
+            </div>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );
 }
-export async function getStaticProps(context) {
+export async function getServerSideProps(context) {
   const { params } = context;
   const userID = params.uid;
+
   const userByID = await prisma.user.findUnique({
     where: {
       id: userID,
     },
   });
+
   return {
     props: {
       loadedUser: JSON.parse(JSON.stringify(userByID)),
     },
-  };
-}
-export async function getStaticPaths() {
-  const usersID = await prisma.user.findMany({
-    select: {
-      id: true,
-    },
-  });
-  const obtoarr = Object.values(usersID);
-  return {
-    paths: obtoarr.map((item) => {
-      return { params: { uid: item.id } };
-    }),
-    fallback: false,
   };
 }

@@ -31,9 +31,12 @@ realestate_frontend/.pnpm-debug.log*
 # local env files
 realestate_frontend/.env*.local
 
+#tsx
+realestate_frontend/next-env.d.ts
+
 # vercel
 realestate_frontend/.vercel
-
+realestate_frontend/tsconfig.json
 
 # Hardhat files
 smart_Contract_test/node_modules

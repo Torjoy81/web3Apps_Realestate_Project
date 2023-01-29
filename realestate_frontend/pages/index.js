@@ -2,9 +2,7 @@ import Banner from "@/components/Banner";
 import Navbar from "@/components/header/Navbar";
 import HouseList from "@/components/HouseList";
 import React from "react";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "./api/lib/db";
 
 export default function DashBoard({ property_data }) {
   return (

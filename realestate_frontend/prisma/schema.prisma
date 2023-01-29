@@ -49,6 +49,7 @@ model User {
   role    Role     @default(USER)
   accounts      Account[]
   sessions      Session[]
+  description   String?  @db.Text
 }
 
 model VerificationToken {
