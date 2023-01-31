@@ -45,7 +45,7 @@ model User {
   dateOfbirth   DateTime
   password      String     
   emailVerified DateTime?
-  image         String?
+  image         String?   @db.LongText
   role    Role     @default(USER)
   accounts      Account[]
   sessions      Session[]

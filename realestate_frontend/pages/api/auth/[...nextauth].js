@@ -1,4 +1,3 @@
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -6,26 +5,38 @@ import CredentialsProvider from "next-auth/providers/credentials";
 const prisma = new PrismaClient();
 
 export default NextAuth({
-  adapter: PrismaAdapter(prisma),
   session: {
     strategy: "jwt",
     maxAge: 2 * 60 * 60,
   },
+
   // adding user info to the user session object
   providers: [
     CredentialsProvider({
       type: "credentials",
       credentials: {},
-      authorize: async (credentials, req) => {
-        const user = await prisma.user.findUnique({
+      async authorize(credentials, req) {
+        console.log(credentials);
+        const result = await prisma.user.findMany({
           where: {
-            email: credentials.email,
+            AND: [
+              {
+                email: { equals: credentials.email },
+                password: { equals: credentials.password },
+              },
+            ],
           },
         });
-        if (user.password === credentials.password) {
+        if (result) {
+          const user = {
+            id: result[0].id,
+            email: result[0].email,
+            firstName: result[0].first_name,
+            lastName: result[0].last_name,
+          };
           return user;
         } else {
-          return null;
+          return { error: "User and password wrong" };
         }
       },
     }),
@@ -34,12 +45,25 @@ export default NextAuth({
     signIn: "/login",
   },
   callbacks: {
-    async jwt({ token, account }) {
+    async jwt({ token, user }) {
       // Persist the OAuth access_token to the token right after signin
-      if (account) {
-        token.accessToken = account.access_token;
+      if (user) {
+        console.log(user);
+        token.id = user.id;
+        token.firstName = user.firstName;
+        token.lastName = user.lastName;
+        token.email = user.email;
+        token.accessToken = user.access_token;
       }
       return token;
+    },
+    session: ({ session, token }) => {
+      if (token) {
+        console.log(token);
+        session.id = token.id;
+        session.email = token.email;
+      }
+      return session;
     },
   },
 });

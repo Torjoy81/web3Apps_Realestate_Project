@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import { GrEdit } from "react-icons/gr";
 import moment from "moment/moment";
-import UpdateFormInput from "@/components/updateFormInput";
+import UpdateFormInput from "../../../components/updateFormInput";
 import { prisma } from "@/pages/api/lib/db";
 import { updateUser } from "@/pages/api/lib/api_function";
+import SideBar from "@/components/SideNav";
+import UploadAvaterImage from "../../../components/UploadAvatarImage";
+import { FaUserCircle } from "react-icons/fa";
+import { Avatar } from "@mui/material";
 
 export default function User_info({ loadedUser, user_update }) {
   const [user_profile_info, setProfile] = useState({
@@ -35,8 +39,11 @@ export default function User_info({ loadedUser, user_update }) {
         : "",
       isEditableAge: true,
     },
+    image: loadedUser ? loadedUser.image : null,
   });
   const [isSubmit, setSubmit] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [perview, setPreview] = useState(null);
   const hanndleBlur = (e, value, key) => {
     if (e.target.id) {
       console.log(e.target.id);
@@ -76,126 +83,182 @@ export default function User_info({ loadedUser, user_update }) {
       setSubmit(false);
     }
   };
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const imgAvatarClose = () => {
+    setPreview(null);
+  };
+
+  const imgAvatarCrop = (view) => {
+    setPreview(view);
+  };
+
+  const handleImageSubmit = async () => {
+    let user_info = { user_id: loadedUser.id };
+    user_info = { ...user_info, ["image"]: perview };
+    const result = await updateUser(user_info);
+    if (result.ok) {
+      setProfile({
+        ...user_profile_info,
+        ["image"]: perview,
+      });
+      setOpen(false);
+      setPreview(null);
+    }
+  };
+  console.log();
 
   return (
-    <div className="flex lg:justify-center">
-      <div className=" bg-white lg:w-[700px] lg:mt-7 rounded-lg p-6 shadow-md">
-        <img
-          className="h-32 w-32 rounded-full mx-auto mb-6"
-          src="profile-image.jpg"
-          alt="Profile Image"
-        />
-        <form onSubmit={handleSubmit}>
-          <div className="ml-10 mr-10">
-            <div className="grid grid-cols-2 gap-5">
+    <div>
+      <SideBar />
+      <div className="flex lg:justify-center">
+        <div className=" bg-white lg:w-[700px] lg:mt-7 rounded-lg p-6 shadow-md">
+          {user_profile_info.image ? (
+            <Avatar
+              className="mx-auto"
+              src={user_profile_info.image}
+              alt="profile pic"
+              sx={{ width: 90, height: 90 }}
+              onClick={handleClickOpen}
+            />
+          ) : (
+            <Avatar sx={{ width: 56, height: 56, margin: "auto" }}>
+              <FaUserCircle
+                className="text-2xl text-gray-600"
+                onClick={handleClickOpen}
+              />
+            </Avatar>
+          )}
+
+          <UploadAvaterImage
+            setClose={handleClose}
+            open={open}
+            onCrop={imgAvatarCrop}
+            onClose={imgAvatarClose}
+            imageSubmit={handleImageSubmit}
+          />
+
+          <form onSubmit={handleSubmit}>
+            <div className="ml-10 mr-10">
+              <div className="grid grid-cols-2 gap-5">
+                <UpdateFormInput
+                  label="First Name"
+                  value={{ ...user_profile_info["name1"] }}
+                  type="text"
+                  id="name1"
+                  handleChange={handleChangeIn}
+                  handleEdit={handleEditable}
+                  name={["first_name", "isEditablename1"]}
+                  tag="input"
+                  hnBlur={hanndleBlur}
+                />
+                <UpdateFormInput
+                  label="SurName"
+                  value={{ ...user_profile_info["name2"] }}
+                  type="text"
+                  id="name2"
+                  handleChange={handleChangeIn}
+                  handleEdit={handleEditable}
+                  name={["last_name", "isEditablename2"]}
+                  tag="input"
+                  hnBlur={hanndleBlur}
+                />
+              </div>
               <UpdateFormInput
-                label="First Name"
-                value={{ ...user_profile_info["name1"] }}
-                type="text"
-                id="name1"
+                label="Email"
+                value={{ ...user_profile_info["Email"] }}
+                type="email"
+                id="Email"
                 handleChange={handleChangeIn}
                 handleEdit={handleEditable}
-                name={["first_name", "isEditablename1"]}
+                name={["email", "isEditableEmail"]}
                 tag="input"
                 hnBlur={hanndleBlur}
               />
               <UpdateFormInput
-                label="SurName"
-                value={{ ...user_profile_info["name2"] }}
+                label="Contact"
+                value={{ ...user_profile_info["Phone"] }}
                 type="text"
-                id="name2"
+                id="Phone"
                 handleChange={handleChangeIn}
                 handleEdit={handleEditable}
-                name={["last_name", "isEditablename2"]}
+                name={["phone_no", "isEditablePhone"]}
                 tag="input"
                 hnBlur={hanndleBlur}
               />
-            </div>
-            <UpdateFormInput
-              label="Email"
-              value={{ ...user_profile_info["Email"] }}
-              type="email"
-              id="Email"
-              handleChange={handleChangeIn}
-              handleEdit={handleEditable}
-              name={["email", "isEditableEmail"]}
-              tag="input"
-              hnBlur={hanndleBlur}
-            />
-            <UpdateFormInput
-              label="Contact"
-              value={{ ...user_profile_info["Phone"] }}
-              type="text"
-              id="Phone"
-              handleChange={handleChangeIn}
-              handleEdit={handleEditable}
-              name={["phone_no", "isEditablePhone"]}
-              tag="input"
-              hnBlur={hanndleBlur}
-            />
-            <UpdateFormInput
-              label="Job Title"
-              value={{ ...user_profile_info["Job"] }}
-              type="text"
-              id="Job"
-              handleChange={handleChangeIn}
-              handleEdit={handleEditable}
-              name={["profession", "isEditableJob"]}
-              tag="select"
-              hnBlur={hanndleBlur}
-            />
-            <div className="mb-4 relative">
-              <label className="block text-gray-700 mb-2" htmlFor="description">
-                About
-              </label>
-              <textarea
-                className="bg-white border border-gray-400 p-2 rounded-lg w-full"
-                rows="3"
-                readOnly
-                value={user_profile_info["About"].about}
-              >
-                {/* Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam
+              <UpdateFormInput
+                label="Job Title"
+                value={{ ...user_profile_info["Job"] }}
+                type="text"
+                id="Job"
+                handleChange={handleChangeIn}
+                handleEdit={handleEditable}
+                name={["profession", "isEditableJob"]}
+                tag="select"
+                hnBlur={hanndleBlur}
+              />
+              <div className="mb-4 relative">
+                <label
+                  className="block text-gray-700 mb-2"
+                  htmlFor="description"
+                >
+                  About
+                </label>
+                <textarea
+                  className="bg-white border border-gray-400 p-2 rounded-lg w-full"
+                  rows="3"
+                  readOnly
+                  value={user_profile_info["About"].about}
+                >
+                  {/* Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam
               viverra euismod odio, gravida pellentesque urna varius vitae. */}
-              </textarea>
-              <GrEdit className="pointer-events-none w-6 h-6 absolute top-1/2 transform -translate-y-1/2 right-3" />
+                </textarea>
+                <GrEdit className="pointer-events-none w-6 h-6 absolute top-1/2 transform -translate-y-1/2 right-3" />
+              </div>
+              <UpdateFormInput
+                label="Nationality"
+                value={{ ...user_profile_info["Country"] }}
+                type="text"
+                id="Country"
+                name={["country", "isEditableCountry"]}
+                handleChange={handleChangeIn}
+                handleEdit={handleEditable}
+                tag="input"
+                hnBlur={hanndleBlur}
+              />
+              <UpdateFormInput
+                label="Date of Birth"
+                value={{ ...user_profile_info["Age"] }}
+                type="date"
+                id="Age"
+                handleChange={handleChangeIn}
+                handleEdit={handleEditable}
+                name={["dateOfbirth", "isEditableAge"]}
+                tag="input"
+                hnBlur={hanndleBlur}
+              />
+              <div className="mb-4 float-right">
+                <button
+                  type="submit"
+                  className={
+                    isSubmit
+                      ? "px-8 py-3 text-white bg-lime-600 rounded focus:outline-none"
+                      : "px-8 py-3 text-white bg-green-300 rounded focus:outline-none"
+                  }
+                  disabled={!isSubmit}
+                >
+                  Update
+                </button>
+              </div>
             </div>
-            <UpdateFormInput
-              label="Nationality"
-              value={{ ...user_profile_info["Country"] }}
-              type="text"
-              id="Country"
-              name={["country", "isEditableCountry"]}
-              handleChange={handleChangeIn}
-              handleEdit={handleEditable}
-              tag="input"
-              hnBlur={hanndleBlur}
-            />
-            <UpdateFormInput
-              label="Date of Birth"
-              value={{ ...user_profile_info["Age"] }}
-              type="date"
-              id="Age"
-              handleChange={handleChangeIn}
-              handleEdit={handleEditable}
-              name={["dateOfbirth", "isEditableAge"]}
-              tag="input"
-              hnBlur={hanndleBlur}
-            />
-            <div className="mb-4 float-right">
-              <button
-                type="submit"
-                className={
-                  isSubmit
-                    ? "px-8 py-3 text-white bg-lime-600 rounded focus:outline-none"
-                    : "px-8 py-3 text-white bg-green-300 rounded focus:outline-none"
-                }
-                disabled={!isSubmit}
-              >
-                Update
-              </button>
-            </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   );

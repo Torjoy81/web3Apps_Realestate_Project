@@ -2,9 +2,12 @@ import React from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
+import { BiUserCircle } from "react-icons/bi";
+import Button from "@mui/material/Button";
 
 function Navbar() {
   const { data: session, status } = useSession();
+
   console.log(session);
 
   const handleLogout = async () => {
@@ -23,6 +26,10 @@ function Navbar() {
 
         {status === "authenticated" ? (
           <div className="flex items-center gap-6">
+            <Link href="#">
+              <BiUserCircle className="h-6 w-6 gap-2" />
+              user Profile
+            </Link>
             <button
               className="bg-violet-700 hover:bg-violet-800 text-white px-4 py-3 rounded-lg transition"
               onClick={handleLogout}
@@ -38,7 +45,7 @@ function Navbar() {
             >
               Sign up
             </Link>
-            <Link className="hover:text-violet-900 transition" href="#">
+            <Link className="hover:text-violet-900 transition" href="/login">
               Log in
             </Link>
           </div>
