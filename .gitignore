@@ -1,46 +1,41 @@
 .DS_Store
-realestate_frontend/node_modules
-realestate_frontend/.pnp
-realestate_frontend/.pnp.js
+node_modules
+.pnp
+.pnp.js
 
 # testing
-realestate_frontend/coverage
+coverage
 
 # next.js
-realestate_frontend/.next/
-realestate_frontend/out/
-realestate_frontend/.env
+.next
+out
+.env
 # production
 realestate_blockchain/build
 
 # misc
-realestate_frontend/.DS_Store
-realestate_frontend/components/.DS_Store
-realestate_frontend/public/.DS_Store
-realestate_frontend/public/static/.DS_Store
-realestate_frontend/public/static/image/.DS_Store
-realestate_frontend/prisma/migrations
+.DS_Store
+components/.DS_Store
+public/.DS_Store
+public/static/.DS_Store
+public/static/image/.DS_Store
+prisma/migrations
 *.pem
 
 # debug
-realestate_frontend/npm-debug.log*
-realestate_frontend/yarn-debug.log*
-realestate_frontend/yarn-error.log*
-realestate_frontend/.pnpm-debug.log*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
 
 # local env files
-realestate_frontend/.env*.local
+.env*.local
 
 #tsx
-realestate_frontend/next-env.d.ts
+next-env.d.ts
 
 # vercel
-realestate_frontend/.vercel
-realestate_frontend/tsconfig.json
+tsconfig.json
 
 # Hardhat files
-smart_Contract_test/node_modules
-smart_Contract_test/cache
-smart_Contract_test/artifacts
-smart_Contract_test/.DS_Store
-smart_Contract_test/.env
+
